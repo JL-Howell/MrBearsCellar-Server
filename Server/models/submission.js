@@ -14,10 +14,6 @@ const Submission = db.define('submission', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    owner: {
-        type: DataTypes.INTEGER,
-        
-    }
 })
 
 module.exports = Submission;

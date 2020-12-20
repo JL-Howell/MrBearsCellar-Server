@@ -22,12 +22,6 @@ const Comments = db.define('comment', {
                 max: 5
             }
         },
-        owner: {
-            type: DataTypes.INTEGER
-        },
-        submission: {
-            type: DataTypes.INTEGER
-        }
 });
 
 module.exports = Comments;

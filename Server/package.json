@@ -8,6 +8,7 @@
     "start": "node app.js",
     "dev": "nodemon"
   },
+  "keywords": [],
   "author": "Jillian Howell",
   "license": "ISC",
   "devDependencies": {

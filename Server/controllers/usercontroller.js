@@ -7,7 +7,7 @@ const { UniqueConstraintError } = require('sequelize/lib/errors');
 
 router.get('/test', (req, res) => res.send('this is a test!')); //this works
 
-
+//User signup route
 router.post('/signup', async (req, res) => {
   let { username, email, password, role } = req.body;
     try {

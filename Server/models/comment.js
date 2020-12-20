@@ -5,7 +5,6 @@ const Comments = db.define('comment', {
         username: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
         date: {
             type: DataTypes.STRING,

@@ -4,14 +4,14 @@ const Comment = require('./comment');
 // const Images = require('./images');
 
 
-// Submission.belongsTo(User);
-// Comment.belongsTo(User);
+Submission.belongsTo(User);
+Comment.belongsTo(User);
 // // Images.belongsTo(User);
 
-// User.hasMany(Submission);
-// User.hasMany(Comment);
+User.hasMany(Submission);
+User.hasMany(Comment);
 // // User.hasMany(Images);
-// Submission.hasMany(Comment);
+Submission.hasMany(Comment);
 // // Images.hasMany(Comments);
 
 

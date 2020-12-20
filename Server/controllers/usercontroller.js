@@ -3,15 +3,13 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-//const { UniqueConstraintError } = require('sequelize/lib/errors');
+const { UniqueConstraintError } = require('sequelize/lib/errors');
 
 router.get('/test', (req, res) => res.send('this is a test!')); //this works
 
 
 router.post('/signup', async (req, res) => {
-   
-    let { username, email, password, role } = req.body;
-
+  let { username, email, password, role } = req.body;
     try {
         const newUser = await User.create({
             username,
@@ -61,7 +59,7 @@ router.post('/login', async (req, res) => {
     } catch (error){
         res.status(500).json({error: 'Failed to login'})
     }
-})
+});
 
 
 module.exports = router;

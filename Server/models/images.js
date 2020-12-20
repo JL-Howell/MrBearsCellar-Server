@@ -1,18 +1,23 @@
-module.exports = function (sequelize, DataTypes) {
-    const Image = sequelize.define('images', {
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        date: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        image: {
-            type: DataTypes.BINARY-STRING,
-            allowNull: false
-        },
-    })
-    return Image;
-};
+// const {DataTypes} =require('sequelize');
+// const db = require('../db')
+
+// const Images = db.define('image', {
+//         title: {
+//             type: DataTypes.STRING,
+//             allowNull: false,
+//         },
+//         date: {
+//             type: DataTypes.STRING,
+//             allowNull: false
+//         },
+//         image: {
+//             type: DataTypes.BINARYSTRING,
+//             allowNull: false
+//         },
+//         owner: {
+//             type: DataTypes.INTEGER
+//         }
+// });
+
+// module.export = Images;
 

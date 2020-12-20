@@ -1,5 +1,7 @@
-module.exports = function (sequelize, DataTypes) {
-    const Comment = sequelize.define('comments', {
+const {DataTypes} =require('sequelize');
+const db = require('../db')
+
+const Comments = db.define('comment', {
         username: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -20,6 +22,13 @@ module.exports = function (sequelize, DataTypes) {
                 max: 5
             }
         },
-    })
-    return Comment;
-};
+        owner: {
+            type: DataTypes.INTEGER
+        },
+        submission: {
+            type: DataTypes.INTEGER
+        }
+});
+
+module.exports = Comments;
+   

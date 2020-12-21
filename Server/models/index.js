@@ -1,21 +1,15 @@
 const User = require('./user');
 const Submission = require('./submission');
 const Comment = require('./comment');
-// const Images = require('./images');
-
-
-Submission.belongsTo(User);
-Comment.belongsTo(User);
-// // Images.belongsTo(User);
+const Images = require('./images');
 
 User.hasMany(Submission);
+Submission.belongsTo(User);
+
 User.hasMany(Comment);
-// // User.hasMany(Images);
+Comment.belongsTo(User);
+
 Submission.hasMany(Comment);
-// // Images.hasMany(Comments);
+Comment.belongsTo(Submission)
 
-
-// User.hasMany(Images)
-// Images.belongsTo(User)
-
-module.exports = {User, Submission, Comment}
+module.exports = {User, Submission, Comment, Images}

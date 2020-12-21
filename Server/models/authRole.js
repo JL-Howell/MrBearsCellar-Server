@@ -5,7 +5,7 @@ const authRoles = function () {
     ac.grant('user')
         .readOwn('user')
         .updateOwn('user')
-        .createOwn('submission')
+        .create('submission')
         .createOwn('images')
         .createOwn('comment')
         .updateOwn('submission')

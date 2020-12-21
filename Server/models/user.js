@@ -17,6 +17,11 @@ const User = db.define('user', {
     role: {
         type: DataTypes.ENUM('user', 'admin'),
         defaultValue: 'user'
+    },
+    profilePic: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: 'https://i.imgur.com/EvEgy19.jpg'
     }
 });
 

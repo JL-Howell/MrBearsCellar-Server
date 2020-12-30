@@ -18,11 +18,7 @@ const User = db.define('user', {
         type: DataTypes.ENUM('user', 'admin'),
         defaultValue: 'user'
     },
-    profilePic: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: 'https://i.imgur.com/EvEgy19.jpg'
-    }
+    
 });
 
 module.exports = User;

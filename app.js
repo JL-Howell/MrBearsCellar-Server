@@ -3,8 +3,14 @@ const express = require('express');
 const db = require('./db');
 const app = express();
 
+
 const controllers = require('./controllers');
 app.use(require('./middleware/headers'));
+
+
+app.use(require('./middleware/headers'));
+
+const controllers = require('./controllers');
 
 // let submission = require('./controllers/submissioncontroller');
 // let user = require('./controllers/usercontroller');

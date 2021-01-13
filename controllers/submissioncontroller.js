@@ -9,19 +9,19 @@ const multer = require('multer');
 
 const path = require('path');
 
-//Connection to AWS
+
 const s3 = new AWS.S3({
     accessKeyId: process.env.ACCESS_KEY,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
     bucket: process.env.BUCKET_NAME
 });
 
-//Connets to AWS Acct & Multer to Upload Image
+
 const picBucket = multer({
     storage: multerS3({
         s3: s3,
         bucket: 'mrbearnewbucket',
-        // acl: 'public-read',
+        acl: 'public-read',
         metadata: function (req, file, cb) {
             console.log(req.body);
             cb(null, { fieldName: file.fieldname });

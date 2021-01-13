@@ -1,3 +1,4 @@
+
 const sequelize = require('sequelize');
 const User = require('./user');
 const Submission = require('./submission');

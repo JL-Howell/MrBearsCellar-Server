@@ -14,6 +14,11 @@ const Submission = db.define('submission', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: ""
+    },
 })
 
 module.exports = Submission;

@@ -36,7 +36,7 @@ const picBucket = multer({
 router.post('/create', validateSession, picBucket.single('image'), async (req, res) => {
     try {
         const { title, date, entry, imageUrl } = req.body;
-        let newSubmission = await Submission.create({ title, date, entry, imageUrl: req.file.location, userId: req.user.id });
+        let newSubmission = await Submission.create({ title, date, entry, imageUrl: req.file.location, userId: req.user.id, submissionId: req.user.id});
         res.status(200).json({
             submission: newSubmission,
             message: 'Submission Created!'
@@ -52,57 +52,46 @@ router.post('/create', validateSession, picBucket.single('image'), async (req, r
 // GET ALL ENTRIES (http://localhost:4000/submission/)
 router.get('/', (req, res) => {
     Submission.findAll ()
-    .then(submissions => res.status(200).json(submissions))
+    .then(submission => res.status(200).json(submission))
     .catch(err => res.status(500).json({ error: err}))
 });
 
 //GET SUBMISSIONS BY USER (http://localhost:4000/submission/mine (plus the token id))
 router.get("/mine", validateSession, (req, res) => {
-    let userid = req.user.id
+    let userId = req.user.id
     Submission.findAll ({
-        where: { userId: userid }
+        where: { userId: userId }
     })
-        .then(submissions => res.status(200).json(submissions))
+        .then(submission => res.status(200).json(submission))
         .catch(err => res.status(500).json({ error: err }))
 });
 
-//GET ITEMS BY TITLE: (http://localhost:4000/submission/Krampus (title of submission))
-router.get('/:title', function (req, res) {
-    let title = req.params.title;
-    Submission.findAll({
-        where: { 
-            title: title 
-        },
-    })
-    .then(submissions => res.status(200).json(submissions))
-    .catch(error => res.status(500).json({ error: error.message || serverErrorMsg }))
-});
 
 //SUBMISSIONS UPDATE (http://localhost:4000/submission/update/2 
-router.put('/update/:id', (req, res) => {
-    const query = req.params.id;
-    Submission.update(req.body, { where: { id: query }})
-        .then((submissionUpdated) => {
-            Submission.findOne ({ where: { id: query }})
-            .then((locatedUpdatedSubmission) => {
-                res.status(200).json({
-                    submission: locatedUpdatedSubmission,
-                    message: 'Submission has been updated!',
-                    submissionChanged: submissionUpdated
-                });
-            });
-        })
-        .catch((error) => res.status(500).json({ error: error.message || serverErrorMsg  }));
+
+router.put("/update/:id", validateSession, function (req, res) {
+    const submissionUpdate = {
+        title: req.body.title,
+        date: req.body.date,
+        entry: req.body.entry,
+        userId: req.user.id
+    };
+    const query = { where: { id: req.params.id, userId: req.user.id } };
+
+    Submission.update(submissionUpdate, query)
+    .then((submission) => res.status(200).json(submission))
+    .catch((err) => res.status(500).json({ error: err }));
 });
 
 //SUBMISSION DELETE (http://localhost:4000/delete/9 (put entry number to delete!))
 
 router.delete('/delete/:id', validateSession, function (req, res) {
     const query = { where: {id: req.params.id, userId: req.user.id }};
-
+    
     Submission.destroy(query)
-        .then(() => res.status(200).json({ message: 'Submission Entry Removed '}))
-        .catch((err) => res.status(500).json ({ error: err }));
+    .then(() => res.status(200).json({ message: 'Submission Entry Removed '}))
+    .catch((err) => res.status(500).json ({ error: err }));
 });
+
 
 module.exports = router;

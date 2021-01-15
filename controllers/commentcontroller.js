@@ -40,43 +40,41 @@ router.get("/mine", validateSession, (req, res) => {
 
 
 //COMMENTS UPDATE (http://localhost:4000/comment/update/2 (put entry number to update!))
-router.put("/update/:id", validateSession, function (req, res) {
-    const commentUpdate = {
-        title: req.body.title,
-        date: req.body.date,
-        entry: req.body.entry,
-    };
-    const query = { where: { id: req.params.id, userId: req.user.id } };
 
-    Comment.update(commentUpdate, query)
-    .then((comment) => res.status(200).json(comment))
-    .catch((err) => res.status(500).json({ error: err }));
+router.put("/:id", (req, res) => {
+    const query = req.params.id;
+
+    Comment.update(req.body,
+        { where: { id: query } })
+        .then((commentUpdate) => {
+            Comments.findOne({
+                where: {
+                    id: query
+                }
+            })
+                .then((locatedUpdatedComment) => {
+                    res.status(200).json({
+                        comment: locatedUpdatedComment,
+                        message: "Comment updated successful",
+                        commentChanged: commentUpdate,
+                    });
+                });
+        })
+
+        .catch((err) => res.json(err));
 });
 
-// router.put('/update/:id', (req, res) => {
-//     const query = req.params.id;
-//     Comment.update(req.body, { where: { id: query }})
-//         .then((commentUpdated) => {
-//             Submission.findOne ({ where: { id: query }})
-//             .then((locatedUpdatedComment) => {
-//                 res.status(200).json({
-//                     comment: locatedUpdatedComment,
-//                     message: 'Submission has been updated!',
-//                     commentChanged: commentUpdated
-//                 });
-//             });
-//         })
-//         .catch((error) => res.status(500).json({ error: error.message || serverErrorMsg  }));
-// });
+
 
 //COMMENT DELETE (http://localhost:4000/delete/9 (put entry number to delete!))
 
-router.delete('/delete/:id', validateSession, function (req, res) {
-    const query = { where: {id: req.params.id, userId: req.user.id }};
+// 
+router.delete('/:id', (req, res) => {
+    Comment.destroy({
+        where: { id: req.params.id }
+    })
+        .then(comment => res.status(200).json(comment))
+        .catch(err => res.json(err))
 
-    Comment.destroy(query)
-        .then(() => res.status(200).json({ message: 'Comment has been Removed'}))
-        .catch((err) => res.status(500).json ({ error: err }));
-});
-
+})
 module.exports = router;

@@ -4,11 +4,9 @@ const {Submission} = require('../models');
 const validateSession = require('../middleware/ValidateSession');
 
 const AWS = require('aws-sdk');
+
 const multerS3 = require('multer-s3');
 const multer = require('multer');
-
-const path = require('path');
-
 
 const s3 = new AWS.S3({
     accessKeyId: process.env.ACCESS_KEY,
@@ -17,10 +15,10 @@ const s3 = new AWS.S3({
 });
 
 
-const picBucket = multer({
+const image = multer({
     storage: multerS3({
         s3: s3,
-        bucket: 'mrbearnewbucket',
+        bucket: process.env.BUCKET_NAME,
         acl: 'public-read',
         metadata: function (req, file, cb) {
             console.log(req.body);
@@ -33,7 +31,7 @@ const picBucket = multer({
 });
 
 //CREATE SUBMISSION -  
-router.post('/create', validateSession, picBucket.single('image'), async (req, res) => {
+router.post('/create', validateSession, image.single('image'), async (req, res) => {
     try {
         const { title, date, entry, imageUrl } = req.body;
         let newSubmission = await Submission.create({ title, date, entry, imageUrl: req.file.location, userId: req.user.id, submissionId: req.user.id});
@@ -69,18 +67,26 @@ router.get("/mine", validateSession, (req, res) => {
 
 //SUBMISSIONS UPDATE (http://localhost:4000/submission/update/2 
 
-router.put("/update/:id", validateSession, function (req, res) {
-    const submissionUpdate = {
-        title: req.body.title,
-        date: req.body.date,
-        entry: req.body.entry,
-        userId: req.user.id
-    };
-    const query = { where: { id: req.params.id, userId: req.user.id } };
-
-    Submission.update(submissionUpdate, query)
-    .then((submission) => res.status(200).json(submission))
-    .catch((err) => res.status(500).json({ error: err }));
+router.put("/update/:id", validateSession, image.single('image'), (req, res) => {
+    const query = req.params.id;
+    const { title, date, entry, imageUrl } = req.body;
+     Submission.update({title, date, entry, imageUrl: req.file.location},
+        {where: {id: query}})
+        .then((subUpdate) => {
+           Submission.findOne({
+                where: {
+                    id: query
+                }
+            })
+            .then((locateUpdateSub) => {
+                res.status(200).json({
+                    sub: locateUpdateSub,
+                    message: 'Post update successful!',
+                    subChanged: subUpdate,
+                })
+            })
+            .catch((err) => res.json(err))
+        })
 });
 
 //SUBMISSION DELETE (http://localhost:4000/delete/9 (put entry number to delete!))
